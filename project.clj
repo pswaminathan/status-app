@@ -12,7 +12,15 @@
                  [ring.middleware.logger "0.5.0"]
                  [compojure "1.5.0"]
                  [environ "1.0.2"]
-                 [reagent "0.5.1"]]
+                 [reagent "0.5.1"]
+                 [cljsjs/chartist "0.9.4-2"]
+                 [cljs-ajax "0.5.4"]
+                 [clj-http "3.0.0-SNAPSHOT"]
+                 [org.clojure/data.json "0.2.6"]
+                 [clj-time "0.11.0"]
+                 [com.amazonaws/aws-lambda-java-core "1.1.0"]
+                 [com.amazonaws/aws-java-sdk-dynamodb "1.10.64"]
+                 [danlentz/clj-uuid "0.1.6"]]
 
   :plugins [[lein-cljsbuild "1.1.1"]
             [lein-environ "1.0.1"]]
@@ -85,9 +93,15 @@
 
   :doo {:build "test"}
 
-  :profiles {:dev
-             {:dependencies [[figwheel "0.5.1"]
-                             [figwheel-sidecar "0.5.1"]
+  :profiles {:healthcheck {:main status.healthcheck
+                           :uberjar-name "healthcheck.jar"}
+             :status-job {:main status.status-job
+                          :uberjar-name "status_job.jar"}
+             :get-statuses {:main status.get-statuses
+                            :uberjar-name "get_statuses.jar"}
+             :dev
+             {:dependencies [[figwheel "0.5.2"]
+                             [figwheel-sidecar "0.5.2"]
                              [com.cemerick/piggieback "0.2.1"]
                              [org.clojure/tools.nrepl "0.2.12"]]
 

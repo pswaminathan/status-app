@@ -13,10 +13,13 @@
 (def api-key "i3x6x4eblN3HCrdEkJWeE7NsyH5WAego5gV5WX8t")
 
 (defn on-the-five
-  "Return input string if its last character is on the 5 or 10"
+  "Return input string if its last character is on the 10"
   [time-string]
-  (let [minute (last time-string)]
-    (if (or (= minute \5) (= minute \0))
+  (let [minute (last time-string)
+        ten (last (butlast time-string))]
+    ;(if (and (= ten \0) (= minute \0))
+    ;  time-string)))
+    (if (= minute \0)
       time-string)))
 
 (defn get-from-sequence
@@ -76,8 +79,8 @@
   [:div.container
    [:h1 (:text @app-state)]
    [:h3 "Uptime"]
-   [(chartist-component "execution_time" response-time-class-name)]
+   [(chartist-component "healthy" uptime-class-name)]
    [:h3 "Response Time"]
-   [(chartist-component "healthy" uptime-class-name)]])
+   [(chartist-component "execution_time" response-time-class-name)]])
 
 (reagent/render [app] (js/document.getElementById "app"))

@@ -94,11 +94,23 @@
   :doo {:build "test"}
 
   :profiles {:healthcheck {:main status.healthcheck
-                           :uberjar-name "healthcheck.jar"}
+                           :uberjar-name "healthcheck.jar"
+                           :dependencies [[org.clojure/data.json "0.2.6"]
+                                          [com.amazonaws/aws-lambda-java-core "1.1.0"]]}
              :status-job {:main status.status-job
-                          :uberjar-name "status_job.jar"}
+                          :uberjar-name "status_job.jar"
+                          :dependencies [[org.clojure/data.json "0.2.6"]
+                                         [clj-http "3.0.0-SNAPSHOT"]
+                                         [clj-time "0.11.0"]
+                                         [com.amazonaws/aws-lambda-java-core "1.1.0"]
+                                         [com.amazonaws/aws-java-sdk-dynamodb "1.10.6g4"]
+                                         [danlentz/clj-uuid "0.1.6"]]}
              :get-statuses {:main status.get-statuses
-                            :uberjar-name "get_statuses.jar"}
+                            :uberjar-name "get_statuses.jar"
+                            :dependencies [[org.clojure/data.json "0.2.6"]
+                                           [clj-time "0.11.0"]
+                                           [com.amazonaws/aws-lambda-java-core "1.1.0"]
+                                           [com.amazonaws/aws-java-sdk-dynamodb "1.10.6g4"]]}
              :dev
              {:dependencies [[figwheel "0.5.2"]
                              [figwheel-sidecar "0.5.2"]

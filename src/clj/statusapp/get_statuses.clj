@@ -5,15 +5,17 @@
             [clj-time.format :as f])
   (:import [java.io PrintWriter]
            [com.amazonaws.services.dynamodbv2 AmazonDynamoDBClient]
-           [com.amazonaws.services.dynamodbv2.document DynamoDB ScanFilter]
-           [com.amazonaws.services.dynamodbv2.document.spec ScanSpec])
+           [com.amazonaws.services.dynamodbv2.document DynamoDB Item]
+           (com.amazonaws.services.dynamodbv2.document.internal ScanCollection))
   (:gen-class
    :methods [^:static [handle [java.io.InputStream
                                java.io.OutputStream
                                com.amazonaws.services.lambda.runtime.Context]
                        void]]))
 
-(extend com.amazonaws.services.dynamodbv2.document.Item json/JSONWriter
+(def table-name "myapp-status")
+
+(extend Item json/JSONWriter
   {:-write (fn [in ^PrintWriter out]
                (.print out (.toJSON in)))})
 
@@ -29,12 +31,13 @@
           (recur nxt)))))
   (.print out \]))
 
-(extend com.amazonaws.services.dynamodbv2.document.internal.ScanCollection json/JSONWriter
+(extend ScanCollection json/JSONWriter
   {:-write write-array})
 
+(defn get-ts [item]
+  (.getString item "ts"))
+
 (defn sort-by-ts [scan-collection]
-  (defn get-ts [item]
-    (.getString item "ts"))
   (sort-by get-ts scan-collection))
 
 (defn get-dynamo []
@@ -42,7 +45,6 @@
 
 (defn -handle
   [in out ctx]
-  (def table-name "myapp-status")
   (let [low (t/ago (t/hours 12))
         ts (f/unparse (f/formatters :date-hour-minute) low)
         dynamo (get-dynamo)

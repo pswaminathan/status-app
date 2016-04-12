@@ -8,9 +8,10 @@
                        void]]))
 
 (defn server-up? 
-  "Returns a boolean value. Stub that returns a random"
+  "Not a very stable server.
+  Stub that returns a random 5% chance of server being down"
   []
-  (true? (>= (rand) 0.05)))
+  (>= (rand) 0.05))
 
 (defn -handle 
   [in out context]
